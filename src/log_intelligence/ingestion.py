@@ -61,15 +61,20 @@ def ingest(file_path: Path) -> None:
             seen_hashes.add(record_hash)
 
             conn.execute("""
-                INSERT INTO raw_logs VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO ingested_logs (
+                    log_id,
+                    ingested_at,
+                    source_file,
+                    log_payload,
+                    record_hash
+                )
+                VALUES (?, ?, ?, ?, ?)
             """, (
                 str(record.get("event_id")),
                 datetime.now(UTC),
                 str(file_path),
                 json.dumps(record),
-                record_hash,
-                True,
-                None
+                record_hash
             ))
 
             stats["valid"] += 1
