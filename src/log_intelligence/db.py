@@ -11,30 +11,13 @@ def get_connection() -> duckdb.DuckDBPyConnection:
     return conn
 
 
-def init_db(conn: duckdb.DuckDBPyConnection) -> None:
+def run_sql_file(conn, path: Path):
     """
-    Creates base schema for raw ingestion.
-    """
-    conn.execute("""
-    CREATE TABLE IF NOT EXISTS raw_logs (
-        raw_id VARCHAR,
-        ingested_at TIMESTAMP,
-        source_file VARCHAR,
-        raw_json VARCHAR,
-        record_hash VARCHAR,
-        is_valid BOOLEAN,
-        rejection_reason VARCHAR
-    );
-    """)
+    Execute all SQL statements from a .sql file using the provided database connection.
 
-    conn.execute("""
-    CREATE TABLE IF NOT EXISTS pipeline_runs (
-        run_id VARCHAR,
-        started_at TIMESTAMP,
-        finished_at TIMESTAMP,
-        records_seen INTEGER,
-        valid_records INTEGER,
-        invalid_records INTEGER,
-        duplicate_records INTEGER
-    );
-    """)
+    Args:
+        conn: Active database connection object with an execute() method.
+        path (Path): Path to the SQL file.
+    """
+    with open(path, "r", encoding="utf-8") as f:
+        conn.execute(f.read())

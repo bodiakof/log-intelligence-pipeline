@@ -3,14 +3,14 @@ import uuid
 from datetime import datetime, UTC
 from pathlib import Path
 
-from log_intelligence.db import get_connection, init_db
+from log_intelligence.db import get_connection, run_sql_file
 from log_intelligence.validation import validate, compute_hash
 from log_intelligence.config import config
 
 
 def ingest(file_path: Path) -> None:
     conn = get_connection()
-    init_db(conn)
+    run_sql_file(conn, "sql/001_schema.sql")
 
     run_id = str(uuid.uuid4())
     started_at = datetime.now(UTC)
