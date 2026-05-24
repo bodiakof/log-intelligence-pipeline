@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import duckdb
 
 from log_intelligence.config import config
