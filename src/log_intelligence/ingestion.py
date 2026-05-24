@@ -1,3 +1,4 @@
+import argparse
 import json
 import uuid
 from datetime import datetime, UTC
@@ -91,3 +92,11 @@ def ingest(file_path: Path) -> None:
 
     print("INGESTION COMPLETE")
     print(stats)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_path")
+
+    args = parser.parse_args()
+
+    ingest(Path(args.file_path))
