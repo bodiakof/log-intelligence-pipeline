@@ -88,7 +88,7 @@ SELECT
     error_count,
     rolling_avg,
     CASE
-        WHEN error_count > rolling_avg * 2 THEN 'SPIKE'
+        WHEN error_count > rolling_avg * 1.0 THEN 'SPIKE'
         ELSE 'NORMAL'
     END AS anomaly_flag
 FROM stats;
