@@ -10,10 +10,9 @@ This Streamlit app visualizes insights from DuckDB:
 - Anomaly detection
 """
 
-import streamlit as st
 import duckdb
-import pandas as pd
 import plotly.express as px
+import streamlit as st
 
 from log_intelligence.config import config
 from log_intelligence.pipeline import run_pipeline
@@ -24,6 +23,7 @@ from log_intelligence.pipeline import run_pipeline
 # -----------------------------
 @st.cache_resource
 def get_conn():
+    """Create and cache a DuckDB connection for dashboard queries."""
     return duckdb.connect(str(config.db_path))
 
 

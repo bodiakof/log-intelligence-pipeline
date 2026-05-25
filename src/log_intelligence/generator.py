@@ -1,3 +1,10 @@
+"""
+Synthetic device log generator.
+
+Creates JSON Lines input data with valid records, invalid records, and
+duplicates so the rest of the pipeline can exercise realistic ingestion paths.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -9,7 +16,6 @@ from pathlib import Path
 from typing import Any
 
 from log_intelligence.config import config
-
 
 DEVICE_MODELS = [
     "CardioSense-X",
@@ -82,7 +88,9 @@ def random_timestamp(start: datetime, end: datetime) -> str:
     return timestamp.isoformat().replace("+00:00", "Z")
 
 
-def build_valid_log(devices: list[dict[str, str]], start: datetime, end: datetime) -> dict[str, Any]:
+def build_valid_log(
+    devices: list[dict[str, str]], start: datetime, end: datetime
+) -> dict[str, Any]:
     """Build one valid simulated device log record."""
     device = random.choice(devices)
     event_type = random.choices(
@@ -208,6 +216,7 @@ def generate_logs(
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments for the log generator."""
     parser = argparse.ArgumentParser(description="Generate simulated device logs.")
 
     parser.add_argument(
@@ -251,6 +260,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Run the log generator from the command line."""
     args = parse_args()
 
     generate_logs(

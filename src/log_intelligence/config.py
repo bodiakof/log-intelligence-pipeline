@@ -1,9 +1,15 @@
+"""
+Configuration helpers for the Log Intelligence Pipeline.
+
+Defines local-first paths for the DuckDB warehouse, raw data, rejected data,
+processed data, and report artifacts.
+"""
+
+import os
 from dataclasses import dataclass
 from pathlib import Path
-import os
 
 from dotenv import load_dotenv
-
 
 load_dotenv()
 

@@ -1,15 +1,28 @@
+"""
+Ingestion layer for raw device logs.
+
+Reads JSONL records, validates required fields, skips duplicate records, writes
+rejected records for auditability, and tracks pipeline run statistics.
+"""
+
 import argparse
 import json
 import uuid
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 
-from log_intelligence.db import get_connection, run_sql_file
-from log_intelligence.validation import validate, compute_hash
 from log_intelligence.config import config
+from log_intelligence.db import get_connection, run_sql_file
+from log_intelligence.validation import compute_hash, validate
 
 
 def ingest(file_path: Path) -> None:
+    """
+    Ingest a JSONL log file into DuckDB.
+
+    Valid records are inserted into the raw table, invalid records are written
+    to the rejected dataset, and duplicate records are counted but skipped.
+    """
     conn = get_connection()
     run_sql_file(conn, "sql/001_schema.sql")
 
@@ -27,7 +40,7 @@ def ingest(file_path: Path) -> None:
 
     rejected_path = config.rejected_dir / f"rejected_{run_id}.jsonl"
 
-    with open(file_path, "r", encoding="utf-8") as f, open(rejected_path, "w") as rejected:
+    with open(file_path, encoding="utf-8") as f, open(rejected_path, "w") as rejected:
 
         for line in f:
             stats["seen"] += 1

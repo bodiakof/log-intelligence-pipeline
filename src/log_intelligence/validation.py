@@ -1,13 +1,20 @@
-import json
+"""
+Validation helpers for raw log records.
+
+Provides stable record hashing for deduplication and schema checks for records
+before they are loaded into DuckDB.
+"""
+
 import hashlib
+import json
 from datetime import datetime
 from typing import Any
-
 
 VALID_EVENT_TYPES = {"info", "warning", "error"}
 
 
 def compute_hash(record: dict[str, Any]) -> str:
+    """Compute a deterministic SHA-256 hash for a log record."""
     normalized = json.dumps(record, sort_keys=True)
     return hashlib.sha256(normalized.encode()).hexdigest()
 
