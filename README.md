@@ -1,113 +1,247 @@
-# Log Intelligence Pipeline
+# 📊 Log Intelligence Pipeline
 
-A local-first data engineering project that transforms raw simulated device logs into structured analytical data, SQL metrics, and dashboard insights.
+A local-first data engineering pipeline that transforms raw simulated device logs into structured analytical datasets, metrics, and interactive dashboards for monitoring and troubleshooting.
 
-This project was built as a trainee Data Engineering task. The goal is to demonstrate how raw semi-structured logs can be ingested, validated, transformed, analyzed, and visualized for monitoring and troubleshooting.
+The project demonstrates a complete end-to-end data engineering workflow including ingestion, validation, transformation, analytics, data quality monitoring, and visualization using Python, SQL, DuckDB, and Streamlit.
 
-## Project Goals
+---
+
+## 🎯 Project Goals
 
 The pipeline demonstrates:
 
-- log data ingestion from simulated device sources
-- validation of malformed, incomplete, and duplicate records
-- separation between raw and processed data
+- Log data ingestion from simulated device sources
+- Validation of malformed, incomplete, and duplicate records
+- Separation between raw, rejected, and analytical data
 - SQL-based transformations and analytical metrics
-- storage in DuckDB, an embedded analytical database
-- dashboard visualization for troubleshooting and monitoring
-- basic data quality and pipeline observability
+- Storage in DuckDB, an embedded analytical database
+- Dashboard visualization for troubleshooting and monitoring
+- Basic data quality checks and pipeline observability
 
-## Architecture
+## 🧱 Architecture
 
 ```text
-Simulated device logs
+Simulated Device Logs
         ↓
-Raw JSONL files
+JSONL Raw Files
         ↓
-Python ingestion and validation
+Python Ingestion Layer
+  - validation
+  - deduplication
+  - rejection handling
         ↓
-DuckDB raw tables
+DuckDB Storage Layer
+  - ingested_logs
+  - pipeline_runs
         ↓
-SQL transformations
+SQL Transformation Layer
+  - events
+  - devices
+  - errors
         ↓
-Processed analytical tables
+SQL Metrics Layer
+  - time series analytics
+  - error rates
+  - anomaly detection
         ↓
-SQL metrics/views
-        ↓
-Streamlit dashboard
+Streamlit Dashboard
+  - monitoring
+  - troubleshooting
+  - operational insights
 ```
 
-## Technology Choices
+## ⚙️ Technology Choices
 
 ### Python
 
-Python is used for log generation, ingestion, validation, orchestration, and pipeline control. It is widely used in data engineering and provides simple integration with local files, databases, and dashboard tools.
+Used for log generation, ingestion, validation, and pipeline orchestration.
 
 ### DuckDB
 
-DuckDB is used as the analytical storage engine. It is lightweight, local-first, SQL-friendly, and well-suited for analytical queries over structured data. It also allows the project to stay simple without requiring a separate database server.
+Embedded analytical database used for storing and querying structured log data. Enables fast SQL analytics without infrastructure overhead.
 
 ### SQL
 
-SQL is used for schema creation, transformations, aggregations, and metrics. This keeps analytical logic explicit and reviewable.
+Used for schema definition, transformations, aggregations, and metrics creation.
 
 ### Streamlit
 
-Streamlit is used for the dashboard because it is easy to run locally and makes the visualization layer reproducible from the GitHub repository.
+Interactive dashboard for visualizing pipeline outputs and operational insights.
 
-## Planned Pipeline Layers
+## 🔄 Pipeline Layers
 
 | Layer | Responsibility |
-|---|---|
-| Ingestion | Read raw JSONL logs and load them into the raw table |
-| Validation | Detect missing fields, invalid timestamps, invalid event types, malformed JSON, and duplicates |
-| Processing | Normalize logs into structured analytical tables |
-| Storage | Store raw and processed data in DuckDB |
-| Analytics | Calculate metrics using SQL views |
-| Visualization | Display monitoring and troubleshooting insights in Streamlit |
-| Observability | Track processed records, rejected records, duplicates, and pipeline run status |
+| --- | --- |
+| Ingestion | Parse logs, validate records, remove duplicates |
+| Storage | Store clean logs in DuckDB |
+| Transformation | Convert raw logs into analytical tables |
+| Metrics | Compute KPIs and monitoring signals |
+| Visualization | Dashboard for operational insights |
+| Quality | Track invalid records, duplicates, pipeline runs |
 
-## Planned Metrics
+## 📊 Key Metrics Implemented
 
-The project will calculate metrics such as:
+- Event volume over time
+- Error rate per device
+- Most frequent error types
+- Device activity, including active and inactive status
+- Failure trends
+- Mean time between errors (MTBE)
+- Error spike detection with anomaly flagging
 
-- total event volume over time
-- error rate per device
-- most frequent error codes
-- device activity status
-- warning/error trends
-- mean time between errors
-- simple error spike detection
+## 🧪 Data Quality & Observability
 
-## Local Setup
+The pipeline tracks:
 
-Create a virtual environment:
+- Total processed records
+- Valid records
+- Invalid records rejected during ingestion
+- Duplicate records skipped
+- Pipeline execution runs with start and end timestamps
+
+Invalid logs are stored separately in a rejected dataset for debugging and auditability.
+
+## 📈 Dashboard Features
+
+The Streamlit dashboard provides:
+
+- Pipeline health overview
+- Time-series event volume
+- Error trend analysis
+- Device-level error rates
+- Top error categories
+- Device activity status
+- Anomaly detection for error spikes
+
+## 📸 Dashboard Screenshots
+
+#### 1. Pipeline Overview
+
+![](reports/screenshots/pipeline_overview.png)
+
+Shows:
+
+- `pipeline_runs` table
+- KPI metrics for events, valid records, invalid records, and duplicates
+
+#### 2. Event Volume Over Time
+
+![](reports/screenshots/event_volume.png)
+
+Shows:
+
+- Time-series event volume chart
+
+#### 3. Error Trends
+
+![](reports/screenshots/error_trends.png)
+
+Shows:
+
+- Error trend line chart
+
+#### 4. Top Error Codes
+
+![](reports/screenshots/top_error_codes.png)
+
+Shows:
+
+- most frequent error codes across devices
+- bar chart of error occurrences per error type
+- distribution of system failures by category
+
+#### 5. Device Error Rate
+
+![](reports/screenshots/device_error_rate.png)
+
+Shows:
+
+- Error rate per device bar chart
+
+#### 6. Device Activity Status
+
+![](reports/screenshots/device_activity_status.png)
+
+Shows:
+
+- distribution of active vs inactive devices
+- pie chart representing device availability status
+- overall system health snapshot from connectivity perspective
+
+#### 7. Anomaly Detection
+
+![](reports/screenshots/anomalies.png)
+
+Shows:
+
+- Anomaly scatter plot with `NORMAL` and `SPIKE` labels
+- Detected spikes table
+
+## 💡 Example Insights
+
+This pipeline enables the following insights:
+
+### 1. System Load Patterns
+
+Event volume over time reveals peak usage periods and system load behavior.
+
+### 2. Device Reliability
+
+Error rate per device identifies unstable or underperforming devices.
+
+### 3. Failure Trends
+
+Time-based error tracking helps detect degradation or improvement in system stability.
+
+### 4. Operational Anomalies
+
+Spike detection highlights unusual bursts of errors that may indicate incidents.
+
+### 5. Device Activity Monitoring
+
+Active vs inactive classification helps monitor connectivity and health of devices.
+
+## 🚀 How to Run
+
+### Create Virtual Environment
 
 ```bash
 python -m venv .venv
 ```
 
-Activate it.
-
-On Windows PowerShell:
+Activate it on Windows PowerShell:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-Install the project dependencies:
+### Install Dependencies
 
 ```bash
 pip install -e ".[dev]"
 ```
 
-## Current Status
+### Run Full Pipeline
 
-The project skeleton is initialized.
+```bash
+python -m log_intelligence.pipeline
+```
 
-Next steps:
+### Run Dashboard
 
-1. Add simulated device log generation.
-2. Create DuckDB schema.
-3. Implement ingestion, validation, and deduplication.
-4. Add SQL transformations and metrics.
-5. Build the Streamlit dashboard.
+```bash
+streamlit run dashboard/streamlit_app.py
+```
+
+## 🧠 Summary
+
+This project demonstrates a complete mini data platform:
+
+- Raw log ingestion
+- ETL pipeline design
+- Analytical modeling
+- SQL-based metrics
+- Interactive visualization
+- Data quality monitoring
+
+Built as a production-style simulation of a real-world observability pipeline.
