@@ -33,10 +33,5 @@ data/raw/*.jsonl
 data/rejected/*.jsonl
 data/processed/*.parquet
 
-# Reports / screenshots generated locally
-reports/screenshots/*.png
-reports/screenshots/*.jpg
-reports/screenshots/*.jpeg
-
 # Streamlit
 .streamlit/secrets.toml
